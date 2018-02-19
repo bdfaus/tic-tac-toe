@@ -1,0 +1,23 @@
+main{
+  height: 450px;
+  width: 400px;
+  background: blue;
+  border: black 2px solid;
+  border-radius: 3%;
+  margin: 60px auto;
+}
+
+.container{
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-template-rows: repeat (3,1fr);
+  height: 400px;
+  width: 390px;
+  background: yellow;
+  border-radius: 3%;
+  margin: 30px auto 20px auto;
+}
+
+.one{
+  border: black solid 1px;
+}
