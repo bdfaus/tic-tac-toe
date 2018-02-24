@@ -1,13 +1,16 @@
 console.log("connected");
 var xTurn = true;
-box = document.querySelectorAll(".one");
-var noWinner = true;
+var box = document.querySelectorAll(".one");
+var available = box;
+var noWinner = true; //variable used to determine if winner
+var player = document.getElementById("player");
+var comp = document.getElementById("comp");
 
 xBoxes = [];
 oBoxes = [];
-winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]
+winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]] //represents winning sequences where numbers are IDs of boxes
 
-start();
+player.addEventListener('click',start);
 
 //adds click event listener to activate playerBoxes()
 function start(){
@@ -38,6 +41,7 @@ function playerBoxes(){
 }
 
 //compares current player sequence (xBoxes array / oBoxes array) against winning sequences (winSeq array)
+	//if there's a match, winner is alerted and click event listners are removed
 function checkWinner(player){
 	winSeq.forEach(function(element){
 		x = 0;
@@ -58,3 +62,13 @@ function checkWinner(player){
 	x = 0;
 	})
 }
+
+function findBestPlay(){
+
+}
+
+//To do
+//create computer logic
+//findBestPlay function for computer
+//separate playerBoxes() function to use findBestPlay rather than 2nd human player
+//implement start() or startComputer() --not yet made-- based on certain events (could use boolean for this?)
