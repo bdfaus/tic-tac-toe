@@ -8,9 +8,14 @@ var comp = document.getElementById("comp");
 
 xBoxes = [];
 oBoxes = [];
-winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]] //represents winning sequences where numbers are IDs of boxes
+winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
+firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
 
 player.addEventListener('click',start);
+
+function compGame(){
+
+}
 
 //adds click event listener to activate playerBoxes()
 function start(){
@@ -19,6 +24,8 @@ function start(){
 	});
 }
 
+//REFACTOR THIS TO ENABLE SINGLE FUNCTION FOR X AND SINGLE FOR O, WOULD MAKE DIFFERNTIATING HUMAN VS. COMP
+// GAME PLAY A BIT EASIER
 function playerBoxes(){
 	if (this.textContent === ''){ //if clicked box textContent ===''
 		if (xTurn){
@@ -63,12 +70,28 @@ function checkWinner(player){
 	})
 }
 
-function findBestPlay(){
-
+//returns whether a square is available or not.
+function isAvailable(square){
+	var check = String(square);
+	var box = document.getElementById(check);
+	 if (box.textContent === ''){
+	 	return true;
+	 } else {
+	 	return false;
+	 }
 }
 
-//To do
-//create computer logic
-//findBestPlay function for computer
-//separate playerBoxes() function to use findBestPlay rather than 2nd human player
-//implement start() or startComputer() --not yet made-- based on certain events (could use boolean for this?)
+function findFirstPlay(){
+	if (isAvailable(5)){
+		document.getElementById("5").textContent = "O";
+	} else {
+		var select = Math.floor(Math.random() * 4);
+		var play = String(firstMoveNotMid[select]);
+		document.getElementById(play).textContent = "O";
+
+	}
+}
+
+//findNextPlay
+//if human is close to winning, block
+//if human is not close to winning 
