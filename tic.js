@@ -49,7 +49,6 @@ function playerBoxes(){
 				checkWinner(oBoxes);
 			}
 		}
-	console.log(this.id)
 	}
 }
 
@@ -65,6 +64,8 @@ function checkWinner(boxesOwned){
 				if (x===2){
 					potentialWinningCombo = element;
 					almost = true;
+					winSeq.pop(potentialWinningCombo);
+					return almost;
 				}
 				else if (x===3){
 					alert("Winner is " + document.getElementById(boxesOwned[0]).textContent);
@@ -94,35 +95,42 @@ function isAvailable(square){
 	 }
 }
 
+//for the computer, if the middle box is open, take it. Otherwise, randomly choose a corner.
+//middle box is best play, and corners are second best (for opening move)
 function findFirstPlay(){
 	if (isAvailable(5)){
-		document.getElementById("5").textContent = "O";
+		document.getElementById("5").click();
 	} else {
 		var select = Math.floor(Math.random() * 4);
 		var play = String(firstMoveNotMid[select]);
-		document.getElementById(play).textContent = "O";
+		document.getElementById(play).click();
 
 	}
 }
 
 //computer finds next play and click is simulated.
 function findNextPlay(){
-	var i = 0 ;
-	console.log(checkWinner(xBoxes));
-	if (checkWinner(xBoxes)){
-		console.log("close is " + potentialWinningCombo);
-		potentialWinningCombo.forEach(function(el){
-			if (xBoxes.indexOf(el) === -1 && isAvailable(el)){
-				document.getElementById(el).click();
-			}
-		})
+	debugger;
+	if (oBoxes.length === 0){
+		findFirstPlay();
 	} else {
-			while (i === 0){
-				var select = Math.floor(Math.random() * 9)+1;
-				if (isAvailable(select)){
-					document.getElementById(select).click();
-					i++;
-				}
+		var i = 0 ;
+		if (checkWinner(xBoxes)){
+			potentialWinningCombo.forEach(function(el){
+				if (xBoxes.indexOf(el) === -1){
+					document.getElementById(el).click();
+					almost = false;
+					} 
+				})
+		} else {
+			checkWinner(oBoxes);
+				while (i === 0){
+					var select = Math.floor(Math.random() * 9)+1;
+					if (isAvailable(select)){
+						document.getElementById(select).click();
+						i++;
+					}
+			}
 		}
 	}
 }
