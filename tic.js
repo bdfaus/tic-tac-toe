@@ -64,8 +64,6 @@ function checkWinner(boxesOwned){
 				if (x===2){
 					potentialWinningCombo = element;
 					almost = true;
-					winSeq.pop(potentialWinningCombo);
-					return almost;
 				}
 				else if (x===3){
 					alert("Winner is " + document.getElementById(boxesOwned[0]).textContent);
@@ -79,6 +77,9 @@ function checkWinner(boxesOwned){
 		})
 	x = 0;
 	})
+	if (xBoxes.length + oBoxes.length === 9){
+		alert("No winner!");
+	}
 	if (almost){
 		return true;
 	}
@@ -118,8 +119,11 @@ function findNextPlay(){
 		if (checkWinner(xBoxes)){
 			potentialWinningCombo.forEach(function(el){
 				if (xBoxes.indexOf(el) === -1){
-					document.getElementById(el).click();
-					almost = false;
+						var toRemove = winSeq.indexOf(potentialWinningCombo);
+						//removes potentialWin... from winSeq array
+						winSeq.splice(toRemove,1);
+						almost = false;
+						document.getElementById(el).click();
 					} 
 				})
 		} else {
