@@ -1,21 +1,29 @@
 console.log("connected");
-var xTurn = true;
+var reset = document.getElementById("reset")
 var box = document.querySelectorAll(".one");
-var available = box;
-var noWinner = true; //variable used to determine if winner
 var player = document.getElementById("player");
 var comp = document.getElementById("comp");
-var compPlayer = false;
-var potentialWinningCombo;
 
+var compPlayer = false;
+var xTurn = true;
+var potentialWinningCombo;
 xBoxes = [];
 oBoxes = [];
 winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
 firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
 
-player.addEventListener('click',start);
+player.addEventListener('click',function(){
+	compPlayer = false;
+	start();
+});
+
 comp.addEventListener('click',function(){
 	compPlayer = true; ///integrate this with playerBoxes somehow?
+	start();
+});
+
+reset.addEventListener('click',function(){
+	resetGame();
 	start();
 });
 
@@ -26,6 +34,21 @@ function start(){
 		element.addEventListener('click',playerBoxes);
 	});
 }
+
+//resets game board but default to game mode that was played in previous game (by not changing compPlayer boolean)
+function resetGame(){
+	box.forEach(function(el){
+		el.textContent = "";
+	});
+	xTurn = true;
+	potentialWinningCombo;
+	xBoxes = [];
+	oBoxes = [];
+	winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
+	firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
+}
+
+
 
 //REFACTOR THIS TO ENABLE SINGLE FUNCTION FOR X AND SINGLE FOR O, WOULD MAKE DIFFERNTIATING HUMAN VS. COMP
 // GAME PLAY A BIT EASIER
@@ -67,7 +90,6 @@ function checkWinner(boxesOwned){
 				}
 				else if (x===3){
 					alert("Winner is " + document.getElementById(boxesOwned[0]).textContent);
-					noWinner = false;
 					//removes click event listener from boxes to prevent further play
 					box.forEach(function(element){
 						element.removeEventListener('click',playerBoxes)
@@ -88,8 +110,8 @@ function checkWinner(boxesOwned){
 //returns whether a square is available or not.
 function isAvailable(square){
 	var check = String(square);
-	var box = document.getElementById(check);
-	 if (box.textContent === ''){
+	var specificBox = document.getElementById(check);
+	 if (specificBox.textContent === ''){
 	 	return true;
 	 } else {
 	 	return false;
@@ -111,24 +133,32 @@ function findFirstPlay(){
 
 //computer finds next play and click is simulated.
 function findNextPlay(){
-	debugger;
 	if (oBoxes.length === 0){
 		findFirstPlay();
 	} else {
 		var i = 0 ;
 		if (checkWinner(xBoxes)){
+			var i = 0;
 			potentialWinningCombo.forEach(function(el){
-				if (xBoxes.indexOf(el) === -1){
+				if (xBoxes.indexOf(el) === -1 && oBoxes.indexOf(el) === -1){
 						var toRemove = winSeq.indexOf(potentialWinningCombo);
 						//removes potentialWin... from winSeq array
 						winSeq.splice(toRemove,1);
 						almost = false;
 						document.getElementById(el).click();
-					} 
+					} else if (i === 2){
+						var toRemove = winSeq.indexOf(potentialWinningCombo);
+						//removes potentialWin... from winSeq array
+						winSeq.splice(toRemove,1);
+						almost = false;
+						findNextPlay();
+					} else {
+						i++;
+					}
 				})
 		} else {
 			checkWinner(oBoxes);
-				while (i === 0){
+				while (i === 0 && xBoxes.length + oBoxes.length < 9){
 					var select = Math.floor(Math.random() * 9)+1;
 					if (isAvailable(select)){
 						document.getElementById(select).click();
@@ -139,6 +169,5 @@ function findNextPlay(){
 	}
 }
 
-//findNextPlay
-//if human is close to winning, block
-//if human is not close to winning 
+
+//if human is not close to winning, try to win
