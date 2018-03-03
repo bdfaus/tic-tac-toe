@@ -53,6 +53,7 @@ function resetGame(){
 //REFACTOR THIS TO ENABLE SINGLE FUNCTION FOR X AND SINGLE FOR O, WOULD MAKE DIFFERNTIATING HUMAN VS. COMP
 // GAME PLAY A BIT EASIER
 function playerBoxes(){
+	debugger;
 	if (this.textContent === ''){ //if clicked box textContent ===''
 		if (xTurn){
 			this.textContent = "X";		
@@ -91,6 +92,7 @@ function checkWinner(boxesOwned){
 				else if (x===3){
 					alert("Winner is " + document.getElementById(boxesOwned[0]).textContent);
 					//removes click event listener from boxes to prevent further play
+					winSeq = [];
 					box.forEach(function(element){
 						element.removeEventListener('click',playerBoxes)
 					});
@@ -101,6 +103,7 @@ function checkWinner(boxesOwned){
 	})
 	if (xBoxes.length + oBoxes.length === 9){
 		alert("No winner!");
+		winSeq = [];
 	}
 	if (almost){
 		return true;
@@ -133,38 +136,50 @@ function findFirstPlay(){
 
 //computer finds next play and click is simulated.
 function findNextPlay(){
-	if (oBoxes.length === 0){
-		findFirstPlay();
-	} else {
-		var i = 0 ;
-		if (checkWinner(xBoxes)){
-			var i = 0;
-			potentialWinningCombo.forEach(function(el){
-				if (xBoxes.indexOf(el) === -1 && oBoxes.indexOf(el) === -1){
-						var toRemove = winSeq.indexOf(potentialWinningCombo);
-						//removes potentialWin... from winSeq array
-						winSeq.splice(toRemove,1);
-						almost = false;
-						document.getElementById(el).click();
-					} else if (i === 2){
-						var toRemove = winSeq.indexOf(potentialWinningCombo);
-						//removes potentialWin... from winSeq array
-						winSeq.splice(toRemove,1);
-						almost = false;
-						findNextPlay();
-					} else {
-						i++;
-					}
-				})
+	if (winSeq.length > 0){
+		if (oBoxes.length === 0){
+			findFirstPlay();
 		} else {
-			checkWinner(oBoxes);
-				while (i === 0 && xBoxes.length + oBoxes.length < 9){
-					var select = Math.floor(Math.random() * 9)+1;
-					if (isAvailable(select)){
-						document.getElementById(select).click();
-						i++;
-					}
+			var i = 0 ;
+			if (checkWinner(xBoxes)){
+				playDefense();
+			} else {
+				checkWinner(oBoxes);
+				playOffense();
 			}
+		}
+	} else {
+		reset.click();
+	}
+}
+
+function playDefense(){
+	var i = 0;
+	potentialWinningCombo.forEach(function(el){
+		if (xBoxes.indexOf(el) === -1 && oBoxes.indexOf(el) === -1){
+				var toRemove = winSeq.indexOf(potentialWinningCombo);
+				//removes potentialWin... from winSeq array
+				winSeq.splice(toRemove,1);
+				almost = false;
+				document.getElementById(el).click();
+			} else if (i === 2){
+				var toRemove = winSeq.indexOf(potentialWinningCombo);
+				//removes potentialWin... from winSeq array
+				winSeq.splice(toRemove,1);
+				almost = false;
+				findNextPlay();
+			} else {
+				i++;
+			}
+		})
+}
+
+function playOffense(){
+	while (i === 0 && xBoxes.length + oBoxes.length < 9){
+		var select = Math.floor(Math.random() * 9)+1;
+		if (isAvailable(select)){
+			document.getElementById(select).click();
+			i++;
 		}
 	}
 }
