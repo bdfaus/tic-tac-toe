@@ -101,7 +101,7 @@ function checkWinner(boxesOwned){
 		})
 	x = 0;
 	})
-	if (xBoxes.length + oBoxes.length === 9){
+	if (xBoxes.length + oBoxes.length === 9 && winSeq.length > 0){
 		alert("No winner!");
 		winSeq = [];
 	}
@@ -140,7 +140,6 @@ function findNextPlay(){
 		if (oBoxes.length === 0){
 			findFirstPlay();
 		} else {
-			var i = 0 ;
 			if (checkWinner(xBoxes)){
 				playDefense();
 			} else {
@@ -174,7 +173,9 @@ function playDefense(){
 		})
 }
 
+
 function playOffense(){
+	var i = 0;
 	while (i === 0 && xBoxes.length + oBoxes.length < 9){
 		var select = Math.floor(Math.random() * 9)+1;
 		if (isAvailable(select)){

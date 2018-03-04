@@ -19,8 +19,7 @@ main{
 }
 
 .one{
-  border: black solid 1px;
-  font-size: 40px;
-  text-align: center;
-  vertical-align: middle;
+  border: blue solid 1px;
+  font-size: 80px;
+  align-items: center;
 }
