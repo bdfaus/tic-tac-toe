@@ -129,11 +129,24 @@ function randomBestPlay(){
 	} else {
 		var i =0;
 		while (i===0){
-			var select = Math.floor(Math.random() * 4);
-			var play = String(firstMoveNotMid[select]);
-			if (isAvailable(play)){
-				document.getElementById(play).click();
-				i++;
+			if (firstMoveNotMid.length > 0){
+				var select = Math.floor(Math.random() * firstMoveNotMid.length);
+				var play = String(firstMoveNotMid[select]);
+				if (isAvailable(play)){
+					document.getElementById(play).click();
+					i++;
+				} else {
+					cornerToRemove = firstMoveNotMid.indexOf(play);
+					firstMoveNotMid.splice(cornerToRemove,1);
+				}
+			} else {
+				var select = Math.floor(Math.random() * 9);
+				var play = box[select].id;
+				console.log(play);
+				if (isAvailable(play)){
+					document.getElementById(play).click();
+					i++;
+				}
 			}
 		}
 	}
