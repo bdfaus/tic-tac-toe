@@ -41,7 +41,7 @@ function resetGame(){
 		el.textContent = "";
 	});
 	xTurn = true;
-	potentialWinningCombo;
+	potentialWinningCombo = [];
 	xBoxes = [];
 	oBoxes = [];
 	winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
@@ -123,14 +123,19 @@ function isAvailable(square){
 
 //for the computer, if the middle box is open, take it. Otherwise, randomly choose a corner.
 //middle box is best play, and corners are second best (for opening move)
-function findFirstPlay(){
+function randomBestPlay(){
 	if (isAvailable(5)){
 		document.getElementById("5").click();
 	} else {
-		var select = Math.floor(Math.random() * 4);
-		var play = String(firstMoveNotMid[select]);
-		document.getElementById(play).click();
-
+		var i =0;
+		while (i===0){
+			var select = Math.floor(Math.random() * 4);
+			var play = String(firstMoveNotMid[select]);
+			if (isAvailable(play)){
+				document.getElementById(play).click();
+				i++;
+			}
+		}
 	}
 }
 
@@ -138,13 +143,16 @@ function findFirstPlay(){
 function findNextPlay(){
 	if (winSeq.length > 0){
 		if (oBoxes.length === 0){
-			findFirstPlay();
+			randomBestPlay();
 		} else {
-			if (checkWinner(xBoxes)){
+			if (checkWinner(oBoxes)){
+				playOffense();
+				// checkWinner(oBoxes);
+			} else if (checkWinner(xBoxes)){
 				playDefense();
 			} else {
 				checkWinner(oBoxes);
-				playOffense();
+				randomBestPlay();
 			}
 		}
 	} else {
@@ -156,33 +164,48 @@ function playDefense(){
 	var i = 0;
 	potentialWinningCombo.forEach(function(el){
 		if (xBoxes.indexOf(el) === -1 && oBoxes.indexOf(el) === -1){
-				var toRemove = winSeq.indexOf(potentialWinningCombo);
-				//removes potentialWin... from winSeq array
-				winSeq.splice(toRemove,1);
-				almost = false;
-				document.getElementById(el).click();
-			} else if (i === 2){
-				var toRemove = winSeq.indexOf(potentialWinningCombo);
-				//removes potentialWin... from winSeq array
-				winSeq.splice(toRemove,1);
-				almost = false;
-				findNextPlay();
-			} else {
-				i++;
-			}
-		})
+			var toRemove = winSeq.indexOf(potentialWinningCombo);
+			//removes potentialWin... from winSeq array
+			winSeq.splice(toRemove,1);
+			almost = false;
+			document.getElementById(el).click();
+		} else if (i === 2){
+			var toRemove = winSeq.indexOf(potentialWinningCombo);
+			//removes potentialWin... from winSeq array
+			winSeq.splice(toRemove,1);
+			almost = false;
+			findNextPlay();
+		} else {
+			i++;
+		}
+	})
 }
 
 
 function playOffense(){
 	var i = 0;
-	while (i === 0 && xBoxes.length + oBoxes.length < 9){
-		var select = Math.floor(Math.random() * 9)+1;
-		if (isAvailable(select)){
-			document.getElementById(select).click();
+	potentialWinningCombo.forEach(function(el){
+		if (xBoxes.indexOf(el) === -1 && oBoxes.indexOf(el) === -1){
+			almost = false;
+			document.getElementById(el).click();
+		} else if (i === 2){
+			var toRemove = winSeq.indexOf(potentialWinningCombo);
+			winSeq.splice(toRemove,1);
+			//removes potentialWin... from winSeq array
+			almost = false;
+			// while (i === 0 && xBoxes.length + oBoxes.length < 9){
+			// 	var select = Math.floor(Math.random() * 9)+1;
+			// 	if (isAvailable(select)){
+			// 		document.getElementById(select).click();
+			// 		i++;
+			// 	}
+			// }
+			findNextPlay();
+		} else {
 			i++;
 		}
-	}
+	})
+	
 }
 
 
