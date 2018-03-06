@@ -205,17 +205,10 @@ function playOffense(){
 			almost = false;
 			document.getElementById(el).click();
 		} else if (i === 2){
+			//removes potentialWin... from winSeq array
 			var toRemove = winSeq.indexOf(potentialWinningCombo);
 			winSeq.splice(toRemove,1);
-			//removes potentialWin... from winSeq array
 			almost = false;
-			// while (i === 0 && xBoxes.length + oBoxes.length < 9){
-			// 	var select = Math.floor(Math.random() * 9)+1;
-			// 	if (isAvailable(select)){
-			// 		document.getElementById(select).click();
-			// 		i++;
-			// 	}
-			// }
 			findNextPlay();
 		} else {
 			i++;
