@@ -3,6 +3,7 @@ var reset = document.getElementById("reset")
 var box = document.querySelectorAll(".one");
 var player = document.getElementById("player");
 var comp = document.getElementById("comp");
+var winAnnounce = document.getElementById("winAnnounce");
 
 var compPlayer = false;
 var xTurn = true;
@@ -37,6 +38,7 @@ function start(){
 
 //resets game board but default to game mode that was played in previous game (by not changing compPlayer boolean)
 function resetGame(){
+	winAnnounce.textContent = "And the winner is ";
 	box.forEach(function(el){
 		el.textContent = "";
 	});
@@ -46,6 +48,7 @@ function resetGame(){
 	oBoxes = [];
 	winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
 	firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
+	start();
 }
 
 
@@ -53,7 +56,6 @@ function resetGame(){
 //REFACTOR THIS TO ENABLE SINGLE FUNCTION FOR X AND SINGLE FOR O, WOULD MAKE DIFFERNTIATING HUMAN VS. COMP
 // GAME PLAY A BIT EASIER
 function playerBoxes(){
-	debugger;
 	if (this.textContent === ''){ //if clicked box textContent ===''
 		if (xTurn){
 			this.textContent = "X";		
@@ -90,19 +92,20 @@ function checkWinner(boxesOwned){
 					almost = true;
 				}
 				else if (x===3){
-					alert("Winner is " + document.getElementById(boxesOwned[0]).textContent);
+					winAnnounce.textContent += document.getElementById(boxesOwned[0]).textContent;
 					//removes click event listener from boxes to prevent further play
 					winSeq = [];
 					box.forEach(function(element){
 						element.removeEventListener('click',playerBoxes)
 					});
+					findNextPlay();
 				}
 			}
 		})
 	x = 0;
 	})
 	if (xBoxes.length + oBoxes.length === 9 && winSeq.length > 0){
-		alert("No winner!");
+		winAnnounce.textContent += "nobody";
 		winSeq = [];
 	}
 	if (almost){
@@ -169,7 +172,7 @@ function findNextPlay(){
 			}
 		}
 	} else {
-		reset.click();
+		setTimeout(resetGame,2000);
 	}
 }
 
