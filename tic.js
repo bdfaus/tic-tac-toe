@@ -4,6 +4,16 @@ var box = document.querySelectorAll(".one");
 var player = document.getElementById("player");
 var comp = document.getElementById("comp");
 var winAnnounce = document.getElementById("winAnnounce");
+var boardContainer = document.getElementById("board");
+var optionsContainer = document.getElementById("options");
+boardContainer.style.display = "none";
+
+//hides options div, shows gameplay div
+function goGameDisp(){
+	optionsContainer.style.display = "none";
+	boardContainer.style.display = "grid";
+}
+
 
 var compPlayer = false;
 var xTurn = true;
@@ -14,18 +24,21 @@ winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //re
 firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
 
 player.addEventListener('click',function(){
+	goGameDisp();
 	compPlayer = false;
 	start();
 });
 
 comp.addEventListener('click',function(){
+	goGameDisp();
 	compPlayer = true; ///integrate this with playerBoxes somehow?
 	start();
 });
 
 reset.addEventListener('click',function(){
 	resetGame();
-	start();
+	optionsContainer.style.display = "block";
+	boardContainer.style.display = "none";
 });
 
 
@@ -217,5 +230,3 @@ function playOffense(){
 	
 }
 
-
-//if human is not close to winning, try to win
