@@ -193,7 +193,6 @@ function randomBestPlay(){
 					document.getElementById(play).click();
 					i++;
 				} else {
-					cornerToRemove = firstMoveNotMid.indexOf(play);
 					firstMoveNotMid.splice(cornerToRemove,1);
 				}
 			} else {
@@ -217,11 +216,11 @@ function findNextPlay(){
 		} else {
 			if (checkWinner(compBoxes)){
 				playOffense();
-				// checkWinner(oBoxes);
+				checkWinner(compBoxes);
 			} else if (checkWinner(humanBoxes)){
 				playDefense();
 			} else {
-				checkWinner(oBoxes);
+				// checkWinner(oBoxes);
 				randomBestPlay();
 			}
 		}
