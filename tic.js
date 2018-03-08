@@ -3,19 +3,30 @@ var reset = document.getElementById("reset")
 var box = document.querySelectorAll(".one");
 var player = document.getElementById("player");
 var comp = document.getElementById("comp");
+var humanX = document.getElementById("playX");
+var humanO = document.getElementById("playO");
 var winAnnounce = document.getElementById("winAnnounce");
 var boardContainer = document.getElementById("board");
 var optionsContainer = document.getElementById("options");
+var playerContainer = document.getElementById("playerSelect");
 boardContainer.style.display = "none";
+playerContainer.style.display = "none";
 
 //hides options div, shows gameplay div
 function goGameDisp(){
+	playerContainer.style.display = 'none';
 	optionsContainer.style.display = "none";
 	boardContainer.style.display = "grid";
 }
 
+//changes board to select-player options
+function goPlayerDisp(){
+	playerContainer.style.display = 'block';
+	optionsContainer.style.display = "none";
+}
 
-var compPlayer = false;
+var compPlayerX = false;
+var compPlayerO = false;
 var xTurn = true;
 var potentialWinningCombo;
 xBoxes = [];
@@ -25,17 +36,34 @@ firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first 
 
 player.addEventListener('click',function(){
 	goGameDisp();
-	compPlayer = false;
+	compPlayerO = false;
+	compPlayerX = false;
 	start();
 });
 
 comp.addEventListener('click',function(){
-	goGameDisp();
-	compPlayer = true; ///integrate this with playerBoxes somehow?
-	start();
+	goPlayerDisp();
 });
 
+humanX.addEventListener('click',function(){
+	compPlayerO = true; ///integrate this with playerBoxes somehow?
+	compBoxes = oBoxes;
+	humanBoxes = xBoxes;
+	goGameDisp();
+	start();
+})
+
+humanO.addEventListener('click',function(){
+	compPlayerX = true; ///integrate this with playerBoxes somehow?
+	compBoxes = xBoxes;
+	humanBoxes = oBoxes;
+	goGameDisp();
+	start();
+})
+
 reset.addEventListener('click',function(){
+	compPlayerO = false;
+	compPlayerX = false;
 	resetGame();
 	optionsContainer.style.display = "block";
 	boardContainer.style.display = "none";
@@ -47,6 +75,9 @@ function start(){
 	box.forEach(function(element){
 		element.addEventListener('click',playerBoxes);
 	});
+	if (compPlayerX){
+		findNextPlay();
+	}
 }
 
 //resets game board but default to game mode that was played in previous game (by not changing compPlayer boolean)
@@ -59,6 +90,12 @@ function resetGame(){
 	potentialWinningCombo = [];
 	xBoxes = [];
 	oBoxes = [];
+	if (compPlayerX){
+		humanO.click();
+	}
+	if (compPlayerO){
+		humanX.click();
+	}
 	winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
 	firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
 	start();
@@ -69,6 +106,7 @@ function resetGame(){
 //REFACTOR THIS TO ENABLE SINGLE FUNCTION FOR X AND SINGLE FOR O, WOULD MAKE DIFFERNTIATING HUMAN VS. COMP
 // GAME PLAY A BIT EASIER
 function playerBoxes(){
+	debugger;
 	if (this.textContent === ''){ //if clicked box textContent ===''
 		if (xTurn){
 			this.textContent = "X";		
@@ -77,7 +115,7 @@ function playerBoxes(){
 			if (xBoxes.length > 2){
 				checkWinner(xBoxes);
 			}
-			if (compPlayer){
+			if (compPlayerO){
 				findNextPlay();
 			}
 		} else {
@@ -86,6 +124,9 @@ function playerBoxes(){
 			oBoxes.push(Number(this.id));
 			if (oBoxes.length > 2){
 				checkWinner(oBoxes);
+			}
+			if (compPlayerX){
+				findNextPlay();
 			}
 		}
 	}
@@ -174,10 +215,10 @@ function findNextPlay(){
 		if (oBoxes.length === 0){
 			randomBestPlay();
 		} else {
-			if (checkWinner(oBoxes)){
+			if (checkWinner(compBoxes)){
 				playOffense();
 				// checkWinner(oBoxes);
-			} else if (checkWinner(xBoxes)){
+			} else if (checkWinner(humanBoxes)){
 				playDefense();
 			} else {
 				checkWinner(oBoxes);
