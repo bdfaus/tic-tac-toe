@@ -110,6 +110,9 @@ function resetGame(){
 // GAME PLAY A BIT EASIER
 function playerBoxes(){
 	if (this.textContent === ''){ //if clicked box textContent ===''
+		if (firstMoveNotMid.indexOf(Number(this.id)) !== -1 && xTurn && compPlayerO){
+			firstMoveNotMid.splice(firstMoveNotMid.indexOf(Number(this.id)),1);
+		}
 		if (xTurn){
 			this.textContent = "X";		
 			xTurn = false;
@@ -191,10 +194,16 @@ function isAvailable(square){
 function randomBestPlay(){
 	if (isAvailable(5)){
 		document.getElementById("5").click();
-	} else if (compPlayerO && oBoxes.length < 2){
-		var select = Math.floor(Math.random()*4 +1)*2;
-		console.log(select);
-		document.getElementById(String(select)).click()
+	} else if (compPlayerO && firstMoveNotMid.length < 3){
+		var i = 0 ;	
+		while (i===0){
+			var select = Math.floor(Math.random()*4 +1)*2;
+			console.log(select);
+			if (isAvailable(String(select))){
+				document.getElementById(String(select)).click();
+				i++;
+			}
+		}
 	} else {
 		var i =0;
 		while (i===0){
