@@ -65,6 +65,7 @@ reset.addEventListener('click',function(){
 	compPlayerO = false;
 	compPlayerX = false;
 	resetGame();
+	playerContainer.style.display = "none";
 	optionsContainer.style.display = "block";
 	boardContainer.style.display = "none";
 });
@@ -91,10 +92,12 @@ function resetGame(){
 	xBoxes = [];
 	oBoxes = [];
 	if (compPlayerX){
-		humanO.click();
+		compBoxes = xBoxes;
+		humanBoxes = oBoxes;
 	}
 	if (compPlayerO){
-		humanX.click();
+		compBoxes = oBoxes;
+		humanBoxes = xBoxes;
 	}
 	winSeq = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]]; //represents winning sequences where numbers are IDs of boxes
 	firstMoveNotMid = [1,3,7,9]; //if middle spot is taken, pick a corner for first move.
@@ -117,6 +120,9 @@ function playerBoxes(){
 			}
 			if (compPlayerO){
 				findNextPlay();
+			}
+			if (winSeq.length === 0  && compPlayerX){
+				setTimeout(resetGame,2000);
 			}
 		} else {
 			this.textContent = "O";
@@ -193,7 +199,7 @@ function randomBestPlay(){
 					document.getElementById(play).click();
 					i++;
 				} else {
-					firstMoveNotMid.splice(cornerToRemove,1);
+					firstMoveNotMid.splice(select,1);
 				}
 			} else {
 				var select = Math.floor(Math.random() * 9);
@@ -211,7 +217,7 @@ function randomBestPlay(){
 //computer finds next play and click is simulated.
 function findNextPlay(){
 	if (winSeq.length > 0){
-		if (oBoxes.length === 0){
+		if (compBoxes.length === 0){
 			randomBestPlay();
 		} else {
 			if (checkWinner(compBoxes)){
