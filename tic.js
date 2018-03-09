@@ -109,7 +109,6 @@ function resetGame(){
 //REFACTOR THIS TO ENABLE SINGLE FUNCTION FOR X AND SINGLE FOR O, WOULD MAKE DIFFERNTIATING HUMAN VS. COMP
 // GAME PLAY A BIT EASIER
 function playerBoxes(){
-	debugger;
 	if (this.textContent === ''){ //if clicked box textContent ===''
 		if (xTurn){
 			this.textContent = "X";		

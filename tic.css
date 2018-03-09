@@ -25,6 +25,11 @@ main{
   border: purple solid 1px;
   font-size: 80px;
   text-align: center;
+  vertical-align: middle;
+}
+
+.preGame{
+  text-align: center;
 }
 
 #winAnnounce {
