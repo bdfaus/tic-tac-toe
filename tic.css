@@ -24,7 +24,7 @@ main{
 .one{
   border: purple solid 1px;
   font-size: 80px;
-  align-items: center;
+  text-align: center;
 }
 
 #winAnnounce {

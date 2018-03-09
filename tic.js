@@ -167,6 +167,9 @@ function checkWinner(boxesOwned){
 	if (xBoxes.length + oBoxes.length === 9 && winSeq.length > 0){
 		winAnnounce.textContent += "nobody";
 		winSeq = [];
+		if (!compPlayerO && !compPlayerX){
+			setTimeout(resetGame,2000);
+		}
 	}
 	if (almost){
 		return true;
@@ -189,6 +192,10 @@ function isAvailable(square){
 function randomBestPlay(){
 	if (isAvailable(5)){
 		document.getElementById("5").click();
+	} else if (compPlayerO && oBoxes.length < 2){
+		var select = Math.floor(Math.random()*4 +1)*2;
+		console.log(select);
+		document.getElementById(String(select)).click()
 	} else {
 		var i =0;
 		while (i===0){
