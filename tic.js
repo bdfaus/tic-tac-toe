@@ -194,7 +194,7 @@ function isAvailable(square){
 function randomBestPlay(){
 	if (isAvailable(5)){
 		document.getElementById("5").click();
-	} else if (compPlayerO && firstMoveNotMid.length < 3){
+	} else if (compPlayerO && (firstMoveNotMid.length % 2 === 0) && firstMoveNotMid.length !== 4 && xBoxes.length < 3){
 		var i = 0 ;	
 		while (i===0){
 			var select = Math.floor(Math.random()*4 +1)*2;
@@ -204,6 +204,14 @@ function randomBestPlay(){
 				i++;
 			}
 		}
+	} else if ((((xBoxes.indexOf(2) !== -1 || xBoxes.indexOf(1) !==-1) && (xBoxes.indexOf(6) !== -1)) || ((xBoxes.indexOf(6) !== -1 || xBoxes.indexOf(9) !== -1) && xBoxes.indexOf(2) !==-1)) && xBoxes.length < 3){
+		document.getElementById('3').click();
+	} else if ((((xBoxes.indexOf(3) !== -1 || xBoxes.indexOf(6) !==-1) && (xBoxes.indexOf(8) !== -1)) || ((xBoxes.indexOf(7) !== -1 || xBoxes.indexOf(8) !== -1) && xBoxes.indexOf(6) !==-1)) && xBoxes.length < 3){
+		document.getElementById('9').click();
+	} else if ((((xBoxes.indexOf(8) !== -1 || xBoxes.indexOf(9) !==-1) && (xBoxes.indexOf(2) !== -1)) || ((xBoxes.indexOf(1) !== -1 || xBoxes.indexOf(4) !== -1) && xBoxes.indexOf(8) !==-1)) && xBoxes.length < 3){
+		document.getElementById('7').click();
+	} else if ((((xBoxes.indexOf(4) !== -1 || xBoxes.indexOf(7) !==-1) && (xBoxes.indexOf(2) !== -1)) || ((xBoxes.indexOf(2) !== -1 || xBoxes.indexOf(3) !== -1) && xBoxes.indexOf(4) !==-1)) && xBoxes.length < 3){
+		document.getElementById('1').click();
 	} else {
 		var i =0;
 		while (i===0){
@@ -290,4 +298,3 @@ function playOffense(){
 	})
 	
 }
-
